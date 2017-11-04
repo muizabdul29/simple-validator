@@ -1,0 +1,26 @@
+{
+    "name": "muizabdul29/validator",
+    "type": "library",
+    "license" : "MIT",
+    "authors" : [
+        {
+            "name": "Abdul Muiz",
+            "email": "hello@abdulmuiz.com",
+            "homepage": "http://www.abdulmuiz.com"
+        }
+    ],
+    "require": {
+        "php": ">=7.1"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "~4.0"
+    },
+    "autoload": {
+        "psr-0": {
+            "Simple": "src/"
+        }
+    },
+    "scripts": {
+        "test": "./vendor/bin/phpunit"
+    }
+}
