@@ -15,14 +15,6 @@ class Validator
      * @var array 
      */
     private $_rawData;
-
-    /**
-     * Returns only the data that was validated. Because the 
-     * original data may contain useless data
-     * 
-     * @var array
-     */
-    private $_validData;
     
     /**
      * @param array $data Data to-be-validated
@@ -55,20 +47,14 @@ class Validator
      * 
      * @return Validation $this
      */
-    public function validate($params, &$validData = null) 
+    public function validate($params) 
     {
         foreach($params as $field => $rules) {
-            foreach ($rules as $r) {
+            foreach ($rules as $rule) {
                 if ($this->callMethod($field, $rule) === false) {
                     $this->_errors[$field] = true;
                     continue 2;
                 }
-            }
-
-            // If a second parameter is provided which references to
-            // an array.
-            if (is_array($validData)) {
-                $validData[$field] = $this->_rawData[$field];
             }
         }
         return $this->countErrors() === 0;
@@ -81,7 +67,7 @@ class Validator
      */
     private function callMethod($field, $params)
     {
-        if (is_array($rule)) {
+        if (is_array($params)) {
             $rule = array_shift($params);
             $args = $params;
         } else {
@@ -152,7 +138,11 @@ class Validator
 
     protected function validateLengthBetween($field, $params) 
     {
-        return $this->validateLengthMin($field, $min) && $this->validateLengthMax($field, $max);
+        $strlen = strlen($this->_rawData[$field]);
+        $min = $params[0] ?? 0;
+        $max = $params[1] ?? 0;
+
+        return $strlen >= $min && $strlen <= $max;
     }
     
     protected function validateLengthMin($field, $params) 
@@ -175,8 +165,9 @@ class Validator
         return $this->_rawData[$field] <= $max;
     }
 
-    protected function validateRegex($field, $regex) 
+    protected function validateRegex($field, $params) 
     {
+        $regex = $params[0] ?? '';
         return preg_match($regex, $this->_rawData[$field]) === 1;
     }
 }
