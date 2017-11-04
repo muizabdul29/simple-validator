@@ -2,7 +2,7 @@
 
 use Simple\Validator;
 
-class AlphaValidTest extends BaseTestCase
+class RulesTest extends BaseTestCase
 {
     public function testAlpha()
     {
