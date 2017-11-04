@@ -27,7 +27,7 @@ class Validator
     /**
      * @param array $data Data to-be-validated
      */
-    public function __construct(&$data)
+    public function __construct($data)
     {
         $this->_rawData = $data;
     }
@@ -221,5 +221,3 @@ class Validator
         return true;
     }
 }
-
-?>
