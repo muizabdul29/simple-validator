@@ -16,7 +16,7 @@ Simple Validator requires PHP 7.1 or newer.
 You can install it using [composer](http://getcomposer.org)
 
 ```
-composer require muizabdul29/simple-validator:dev-master
+composer require muizabdul29/simple-validator
 ```
 
 ## Examples
