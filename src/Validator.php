@@ -220,4 +220,17 @@ class Validator
         }
         return true;
     }
+
+    protected function validateRegex($field, $regex) 
+    {
+        if (empty($this->_rawData[$field])) {
+            return;
+        }
+
+        if (preg_match($regex, $this->_rawData[$field]) !== 1) {
+            $this->_errors[$field] = true;
+            return false;
+        }
+        return true;
+    }
 }

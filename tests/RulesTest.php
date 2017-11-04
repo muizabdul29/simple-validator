@@ -18,4 +18,19 @@ class RulesTest extends BaseTestCase
 
         $this->assertEquals(true, $v->validate($rules));
     }
+
+    public function testRegex()
+    {
+        $_POST = [
+            'name' => 'Abdul Muiz'
+        ];
+
+        $rules = [
+            'name' => [['regex', '/^[a-zA-Z-. ]+$/']]
+        ];
+
+        $v = new Validator($_POST);
+
+        $this->assertEquals(true, $v->validate($rules));
+    }
 }
