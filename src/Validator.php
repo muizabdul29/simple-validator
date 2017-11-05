@@ -5,7 +5,7 @@ namespace Simple;
 class Validator
 {
     /**
-     * Contains the errors with field names as keys
+     * Contains the field names that have errors
      * @var array
      */
     private $_errors = [];
@@ -52,7 +52,7 @@ class Validator
         foreach($params as $field => $rules) {
             foreach ($rules as $rule) {
                 if ($this->callMethod($field, $rule) === false) {
-                    $this->_errors[$field] = true;
+                    $this->_errors[] = $field;
                     continue 2;
                 }
             }
