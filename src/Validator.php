@@ -128,6 +128,14 @@ class Validator
         return is_int($this->_rawData[$field]) || ctype_digit($this->_rawData[$field]);
     }
     
+    protected function validateLength($field, $params)
+    {
+        $strlen = strlen($this->_rawData[$field]);
+        $length = $params[0] ?? 0;
+
+        return $strlen === $length;
+    }
+
     protected function validateLengthMax($field, $params)
     {
         $strlen = strlen($this->_rawData[$field]);
