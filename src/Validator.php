@@ -8,20 +8,20 @@ class Validator
      * Contains the field names that have errors
      * @var array
      */
-    private $_errors = [];
+    private $errors = [];
 
     /**
-     * References to data yet to be validated
+     * References to raw data
      * @var array 
      */
-    private $_rawData;
+    private $rawData;
     
     /**
-     * @param array $data Data to-be-validated
+     * __construct()
      */
-    public function __construct($data)
+    public function __construct()
     {
-        $this->_rawData = $data;
+        //
     }
 
     /**
@@ -31,15 +31,15 @@ class Validator
      */
     public function countErrors()
     {
-        return count($this->_errors);
+        return count($this->errors);
     }
 
     /**
      * @return array Array of field wise errors
      */
-    public function getErrors()
+    public function getInvalidFields()
     {
-        return $this->_errors;
+        return $this->errors;
     }
 
     /**
@@ -47,12 +47,16 @@ class Validator
      * 
      * @return Validation $this
      */
-    public function validate($params) 
+    public function validate($params, $data = []) 
     {
+        $this->rawData = $data;
+
         foreach($params as $field => $rules) {
             foreach ($rules as $rule) {
                 if ($this->callMethod($field, $rule) === false) {
-                    $this->_errors[] = $field;
+                    $this->errors[] = $field;
+
+                    // Skip other rules if one fails
                     continue 2;
                 }
             }
@@ -75,7 +79,10 @@ class Validator
             $args = [];
         }
 
-        if ($rule !== 'required' && $rule !== 'accepted' && empty($this->_rawData[$field])) {
+        if (
+            $rule !== 'required' && $rule !== 'accepted' && 
+            empty($this->rawData[$field])
+        ) {
             return true;
         }
         // PSR-1 compliant method name
@@ -90,18 +97,18 @@ class Validator
 
     protected function validateRequired($field) 
     {
-        return !empty($this->_rawData[$field]);
+        return !empty($this->rawData[$field]);
     }
 
     protected function validateAccepted($field)    
     {
         $acceptable = array('yes', 'on', 1, '1', true);
-        return $this->validateRequired($field) && in_array($this->_rawData[$field], $acceptable, true);
+        return $this->validateRequired($field) && in_array($this->rawData[$field], $acceptable, true);
     }
 
     protected function validateEmail($field)
     {
-        return filter_var($this->_rawData[$field], FILTER_VALIDATE_EMAIL);
+        return filter_var($this->rawData[$field], FILTER_VALIDATE_EMAIL);
     }
 
     /**
@@ -110,53 +117,52 @@ class Validator
     protected function validateAlpha($field, $params = [0])
     {
         if ($params[0] === 1) {
-            $subject = str_replace(' ', '', $this->_rawData[$field]);
+            $subject = str_replace(' ', '', $this->rawData[$field]);
         } else {
-            $subject = $this->_rawData[$field];
+            $subject = $this->rawData[$field];
         }
-
         return ctype_alpha($subject);
     }
     
     protected function validateAlphaNum($field) 
     {
-        return ctype_alnum($this->_rawData[$field]);
+        return ctype_alnum($this->rawData[$field]);
     }
     
     protected function validateDigit($field) 
     {
-        return is_int($this->_rawData[$field]) || ctype_digit($this->_rawData[$field]);
+        return is_int($this->rawData[$field]) || ctype_digit($this->rawData[$field]);
     }
     
     protected function validateLength($field, $params)
     {
-        $strlen = strlen($this->_rawData[$field]);
         $length = $params[0] ?? 0;
+        $strlen = strlen($this->rawData[$field]);
 
         return $strlen === $length;
     }
 
     protected function validateLengthMax($field, $params)
     {
-        $strlen = strlen($this->_rawData[$field]);
         $length = $params[0] ?? 0;
+        $strlen = strlen($this->rawData[$field]);
 
         return $strlen <= $length;
     }
 
     protected function validateLengthBetween($field, $params) 
     {
-        $strlen = strlen($this->_rawData[$field]);
         $min = $params[0] ?? 0;
         $max = $params[1] ?? 0;
+        $strlen = strlen($this->rawData[$field]);
 
         return $strlen >= $min && $strlen <= $max;
     }
     
     protected function validateLengthMin($field, $params) 
     {
-        $strlen = strlen($this->_rawData[$field]);
         $length = $params[0] ?? 0;
+        $strlen = strlen($this->rawData[$field]);
 
         return $strlen >= $length;
     }
@@ -164,18 +170,18 @@ class Validator
     protected function validateMin($field, $params)
     {
         $min = $params[0] ?? 0;
-        return $this->_rawData[$field] >= $min;
+        return $this->rawData[$field] >= $min;
     }
 
     protected function validateMax($field, $params)
     {
         $max = $params[0] ?? 0;
-        return $this->_rawData[$field] <= $max;
+        return $this->rawData[$field] <= $max;
     }
 
     protected function validateRegex($field, $params) 
     {
         $regex = $params[0] ?? '';
-        return preg_match($regex, $this->_rawData[$field]) === 1;
+        return preg_match($regex, $this->rawData[$field]) === 1;
     }
 }
