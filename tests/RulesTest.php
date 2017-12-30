@@ -14,9 +14,9 @@ class RulesTest extends BaseTestCase
             'name' => [['alpha', 1]]
         ];
 
-        $v = new Validator($_POST);
+        $v = new Validator();
 
-        $this->assertEquals(true, $v->validate($rules));
+        $this->assertEquals(true, $v->validate($rules, $_POST));
     }
 
     public function testRegex()
@@ -29,9 +29,9 @@ class RulesTest extends BaseTestCase
             'name' => [['regex', '/^[a-zA-Z-. ]+$/']]
         ];
 
-        $v = new Validator($_POST);
+        $v = new Validator();
 
-        $this->assertEquals(true, $v->validate($rules));
+        $this->assertEquals(true, $v->validate($rules, $_POST));
     }
 
     public function testMultiple()
@@ -52,9 +52,9 @@ class RulesTest extends BaseTestCase
             't_and_c' => [ 'accepted' ]
         ];
 
-        $v = new Validator($_POST);
+        $v = new Validator();
         
-        $this->assertEquals(true, $v->validate($rules));
+        $this->assertEquals(true, $v->validate($rules, $_POST));
 
     }
 }
