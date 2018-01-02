@@ -37,7 +37,9 @@ $rules = [
     'name' => [ 'required', ['lengthBetween', 2, 16] ]
 ];
 
-$v = new Validator($data);
+$v = new Validator();
+
+$v->setData($data);
 
 if ($v->validate($rules)) {
     echo 'Valid';
