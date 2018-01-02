@@ -48,6 +48,8 @@ class Validator
     public function setData($data = [])
     {
         $this->rawData = $data;
+
+        return $this;
     }
 
     /**
