@@ -43,22 +43,14 @@ class Validator
     }
 
     /**
-     * Set the data to-be validated
-     */
-    public function setData($data = [])
-    {
-        $this->rawData = $data;
-
-        return $this;
-    }
-
-    /**
      * Main validation function exposed to public
      * 
      * @return Validation $this
      */
-    public function validate($params)
+    public function validate($params, $data = [])
     {
+        $this->rawData = $data;
+        
         foreach($params as $field => $rules) {
             foreach ($rules as $rule) {
                 if ($this->callMethod($field, $rule) === false) {
