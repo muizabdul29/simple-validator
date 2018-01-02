@@ -16,9 +16,7 @@ class RulesTest extends BaseTestCase
 
         $v = new Validator();
 
-        $v->setData($_POST);
-
-        $this->assertEquals(true, $v->validate($rules));
+        $this->assertEquals(true, $v->validate($rules, $_POST));
     }
 
     public function testRegex()
@@ -33,9 +31,7 @@ class RulesTest extends BaseTestCase
 
         $v = new Validator();
 
-        $v->setData($_POST);
-
-        $this->assertEquals(true, $v->validate($rules));
+        $this->assertEquals(true, $v->validate($rules, $_POST));
     }
 
     public function testMultiple()
@@ -58,9 +54,7 @@ class RulesTest extends BaseTestCase
 
         $v = new Validator();
 
-        $v->setData($_POST);
-
-        $this->assertEquals(true, $v->validate($rules));
+        $this->assertEquals(true, $v->validate($rules, $_POST));
 
     }
 }

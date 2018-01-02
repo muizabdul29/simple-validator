@@ -39,9 +39,7 @@ $rules = [
 
 $v = new Validator();
 
-$v->setData($data);
-
-if ($v->validate($rules)) {
+if ($v->validate($rules, $data)) {
     echo 'Valid';
 } else {
     echo 'Invalid';
